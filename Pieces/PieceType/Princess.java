@@ -1,86 +1,96 @@
+/**
+ * 
+ */
 package PieceType;
+
 import java.util.ArrayList;
 
 import Components.ChessBoard;
 import Components.ChessPiece;
 import Components.Player;
 
-
 /**
- * This class describes the Chess-Piece "Queen" with all its functionalities.
- * 
+ * This class represents the custom piece 'Princess'. All the implementation of its attributes
+ * and functionalities can be found here. Princess is a special piece and it inherits its movements
+ * from the Princess and the Bishop. She has to protect her father(King) in this war. Usually she does
+ * not appear in a normal game of chess, but due to here exceptional battle skills, she is called upon
+ * to unleash the wrath.
+ *  
  * @author Vishrut Reddi
  *
  */
-public class Queen extends ChessPiece{
+public class Princess extends ChessPiece {
+
 	
 	/**
 	 * Default Constructor
 	 */
-	public Queen(){
+	public Princess(){
 		
 		this.setPieceColor(null);
 		this.setCurrentPosition(-1, -1);
 	}
 	
 	/**
-	 * This constructor sets the new Queen to by whatever color is specified.
+	 * This constructor sets the new Princess to by whatever color is specified.
 	 * The current position of intent is (-1, -1) which does not exist. it 
 	 * only acts as a place holder. With this current position the piece is not
 	 * yet set on the board.
 	 * 
 	 * @param color
 	 */
-	public Queen(PieceColor color){
+	public Princess(PieceColor color){
 		
 		this.setPieceColor(color);
 		this.setCurrentPosition(-1, -1);
 	}
 	
 	
+	
 	/**
-	 * This parameterized constructor sets the the position of the Queen associated
-	 * with the Chess-Piece. NOTE that the position assigned to the Queen is just
-	 * the position that the Queen is intended to be in. It has not been placed on 
-	 * the Chess Board with this constructor.
+	 * This parameterized constructor sets the position of the Princess associated with the
+	 * Chess-Piece. NOTE that the position assigned to the Princess is just the position
+	 * that the Princess is intended to be in. It has not been placed on the Chess Board
+	 * with this constructor.
 	 * 
-	 * @param color
 	 * @param r
 	 * @param c
 	 */
-	public Queen(int r, int c){
+	public Princess(int r, int c){
 		
 		this.setCurrentPosition(r, c);
 	}
 	
 	
+	
 	/**
 	 * This parameterized constructor sets the assigned color and the position of the 
-	 * Queen associated with the Chess-Piece. NOTE that the position assigned to the Queen
-	 * is just the position that the Queen is intended to be in. It has not been placed on 
+	 * Princess associated with the Chess-Piece. NOTE that the position assigned to the Princess
+	 * is just the position that the Princess is intended to be in. It has not been placed on 
 	 * the Chess Board with this constructor.
 	 * 
 	 * @param color
 	 * @param r
 	 * @param c
 	 */
-	public Queen(PieceColor color, int r, int c){
+	public Princess(PieceColor color, int r, int c){
 		
 		this.setPieceColor(color);
 		this.setCurrentPosition(r, c);
 	}
 	
+	
 	/**
 	 * This parameterized constructor sets the assigned color and the position of the 
-	 * Queen associated with the Chess-Piece. NOTE that the position assigned to the Queen
-	 * is just the position that the Queen is intended to be in. It has not been placed on 
+	 * Princess associated with the Chess-Piece. NOTE that the position assigned to the Princess
+	 * is just the position that the Princess is intended to be in. It has not been placed on 
 	 * the Chess Board with this constructor. The Position this time is passed in the form 
 	 * of an Array.
 	 * 
 	 * @param color
 	 * @param curPos
 	 */
-	public Queen(PieceColor color, int[] curPos){
+	public Princess(PieceColor color, int[] curPos){
 		
 		this.setPieceColor(color);
 		this.setCurrentPosition(curPos[0], curPos[1]);
@@ -88,188 +98,133 @@ public class Queen extends ChessPiece{
 	
 	
 	
-	
-	
 	/**
-	 * Queen inherits the same kind of Up moves from the Rook, therefore an emulated Queen is created
-	 * to mimic the Rook's movement for the Queen's spot to get the list of valid moves.
+	 * Finds all the valid move spots for the Princess in the Upper Right Side
+	 * Quadrant of the Princess's current position. There will be at-most 2 valid moves
+	 * in this Quadrant.
+	 * 
+	 * Inherited Moves from Knight + Bishop
 	 * 
 	 * @param board
-	 * @return nextMoves
-	 */
-	public ArrayList<int[]> getValidUpMoves(ChessBoard board){
-				
-		int curPos[] = this.getCurrentPosition();
-		Rook emulatedQueen = new Rook(this.getPieceColor(), curPos[0], curPos[1]);
-		
-		return emulatedQueen.getValidUpMoves(board);
-	}
-	
-	
-	
-	
-	/**
-	 * Queen inherits the same kind of Down moves from the Rook, therefore an emulated Queen is created
-	 * to mimic the Rook's movement for the Queen's spot to get the list of valid moves.
-	 * 
-	 * @param board
-	 * @return nextMoves
-	 */
-	public ArrayList<int[]> getValidDownMoves(ChessBoard board){
-				
-		int curPos[] = this.getCurrentPosition();
-		Rook emulatedQueen = new Rook(this.getPieceColor(), curPos[0], curPos[1]);
-		
-		return emulatedQueen.getValidDownMoves(board);
-	}
-
-	
-	
-	
-	/**
-	 * Queen inherits the same kind of Right moves from the Rook, therefore an emulated Queen is created
-	 * to mimic the Rook's movement for the Queen's spot to get the list of valid moves.
-	 * 
-	 * @param board
-	 * @return nextMoves
-	 */
-	public ArrayList<int[]> getValidRightMoves(ChessBoard board){
-				
-		int curPos[] = this.getCurrentPosition();
-		Rook emulatedQueen = new Rook(this.getPieceColor(), curPos[0], curPos[1]);
-		
-		return emulatedQueen.getValidRightMoves(board);
-	}
-
-	
-	
-	/**
-	 * Queen inherits the same kind of Left moves from the Rook, therefore an emulated Queen is created
-	 * to mimic the Rook's movement for the Queen's spot to get the list of valid moves.
-	 * 
-	 * @param board
-	 * @return nextMoves
-	 */
-	public ArrayList<int[]> getValidLeftMoves(ChessBoard board){
-				
-		int curPos[] = this.getCurrentPosition();
-		Rook emulatedQueen = new Rook(this.getPieceColor(), curPos[0], curPos[1]);
-		
-		return emulatedQueen.getValidLeftMoves(board);
-	}
-	
-	
-	
-	
-	/**
-	 * Queen inherits the same kind of Up Right moves from the Bishop, therefore an emulated Queen is created
-	 * to mimic the Bishop's movement for the Queen's spot to get the list of valid moves.
-	 * 
-	 * @param board
-	 * @return nextMoves
+	 * @return nextMoves (List of Valid Moves)
 	 */
 	public ArrayList<int[]> getValidUpRightMoves(ChessBoard board){
 		
-		int curPos[] = this.getCurrentPosition();
-		Bishop emulatedQueen = new Bishop(this.getPieceColor(), curPos[0], curPos[1]);
+		ArrayList<int[]> nextMoves = new ArrayList<int[]>();
 		
-		return emulatedQueen.getValidUpRightMoves(board);
+		int curPos[] = this.getCurrentPosition();
+		Bishop emulatedBPrincess = new Bishop(this.getPieceColor(), curPos[0], curPos[1]);
+		Knight emulatedKPrincess = new Knight(this.getPieceColor(), curPos[0], curPos[1]);
+		
+		nextMoves.addAll(emulatedBPrincess.getValidUpRightMoves(board));
+		nextMoves.addAll(emulatedKPrincess.getValidUpRightMoves(board));
+		return nextMoves;
 	}
 	
 	
 	
 	
 	/**
-	 * Queen inherits the same kind of Up Left moves from the Bishop, therefore an emulated Queen is created
-	 * to mimic the Bishop's movement for the Queen's spot to get the list of valid moves.
+	 * Finds all the valid move spots for the Princess in the Upper Left Side
+	 * Quadrant of the Princess's current position. There will be at-most 2 valid moves
+	 * in this Quadrant.
+	 * 
+	 * Inherited Moves from Knight + Bishop
 	 * 
 	 * @param board
-	 * @return nextMoves
+	 * @return nextMoves (List of Valid Moves)
 	 */
 	public ArrayList<int[]> getValidUpLeftMoves(ChessBoard board){
 		
-		int curPos[] = this.getCurrentPosition();
-		Bishop emulatedQueen = new Bishop(this.getPieceColor(), curPos[0], curPos[1]);
+		ArrayList<int[]> nextMoves = new ArrayList<int[]>();
 		
-		return emulatedQueen.getValidUpLeftMoves(board);
+		int curPos[] = this.getCurrentPosition();
+		Bishop emulatedBPrincess = new Bishop(this.getPieceColor(), curPos[0], curPos[1]);
+		Knight emulatedKPrincess = new Knight(this.getPieceColor(), curPos[0], curPos[1]);
+		
+		nextMoves.addAll(emulatedBPrincess.getValidUpLeftMoves(board));
+		nextMoves.addAll(emulatedKPrincess.getValidUpLeftMoves(board));
+		return nextMoves;
 	}
 	
 	
 	
 	
 	/**
-	 * Queen inherits the same kind of Down Right moves from the Bishop, therefore an emulated Queen is created
-	 * to mimic the Bishop's movement for the Queen's spot to get the list of valid moves.
+	 * Finds all the valid move spots for the Princess in the Lower Right Side
+	 * Quadrant of the Princess's current position. There will be at-most 2 valid moves
+	 * in this Quadrant.
+	 * 
+	 * Inherited Moves from Knight + Bishop
 	 * 
 	 * @param board
-	 * @return nextMoves
+	 * @return nextMoves (List of Valid Moves)
 	 */
 	public ArrayList<int[]> getValidDownRightMoves(ChessBoard board){
 		
-		int curPos[] = this.getCurrentPosition();
-		Bishop emulatedQueen = new Bishop(this.getPieceColor(), curPos[0], curPos[1]);
+		ArrayList<int[]> nextMoves = new ArrayList<int[]>();
 		
-		return emulatedQueen.getValidDownRightMoves(board);
+		int curPos[] = this.getCurrentPosition();
+		Bishop emulatedBPrincess = new Bishop(this.getPieceColor(), curPos[0], curPos[1]);
+		Knight emulatedKPrincess = new Knight(this.getPieceColor(), curPos[0], curPos[1]);
+		
+		nextMoves.addAll(emulatedBPrincess.getValidDownRightMoves(board));
+		nextMoves.addAll(emulatedKPrincess.getValidDownRightMoves(board));
+		return nextMoves;
 	}
 	
 	
 	
 	
 	/**
-	 * Queen inherits the same kind of Down Left moves from the Bishop, therefore an emulated Queen is created
-	 * to mimic the Bishop's movement for the Queen's spot to get the list of valid moves.
+	 * Finds all the valid move spots for the Princess in the Lower Left Side
+	 * Quadrant of the Princess's current position. There will be at-most 2 valid moves
+	 * in this Quadrant.
+	 * 
+	 * Inherited Moves from Knight + Bishop
 	 * 
 	 * @param board
-	 * @return nextMoves
+	 * @return nextMoves (List of Valid Moves)
 	 */
 	public ArrayList<int[]> getValidDownLeftMoves(ChessBoard board){
 		
-		int curPos[] = this.getCurrentPosition();
-		Bishop emulatedQueen = new Bishop(this.getPieceColor(), curPos[0], curPos[1]);
+		ArrayList<int[]> nextMoves = new ArrayList<int[]>();
 		
-		return emulatedQueen.getValidDownLeftMoves(board);
+		int curPos[] = this.getCurrentPosition();
+		Bishop emulatedBPrincess = new Bishop(this.getPieceColor(), curPos[0], curPos[1]);
+		Knight emulatedKPrincess = new Knight(this.getPieceColor(), curPos[0], curPos[1]);
+		
+		nextMoves.addAll(emulatedBPrincess.getValidDownLeftMoves(board));
+		nextMoves.addAll(emulatedKPrincess.getValidDownLeftMoves(board));
+		return nextMoves;
 	}
 	
 	
-		
 	/**
-	 * One by one finds all the valid moves for the Queen in the current position and in the
+	 * One by one finds all the valid moves for the Princess in the current position and in the
 	 * current board state/situation.
 	 * 
 	 * @param board
-	 * @return
+	 * @return nextMoves (A List of all Moves)
 	 */
 	public ArrayList<int[]> getNextMoves(ChessBoard board){
 		
 		ArrayList<int[]> nextMoves = new ArrayList<int[]>();
 		
-		//Valid UP moves
-		nextMoves.addAll(getValidUpMoves(board));
-		
-		//Valid RIGHT moves
-		nextMoves.addAll(getValidRightMoves(board));
-		
-		//Valid DOWN moves
-		nextMoves.addAll(getValidDownMoves(board));
-		
-		//Valid LEFT moves
-		nextMoves.addAll(getValidLeftMoves(board));
-		
-		//Valid TOP RIGHT DIAGONAL moves
+		//Valid UP RIGHT moves
 		nextMoves.addAll(getValidUpRightMoves(board));
 		
-		//Valid TOP LEFT DIAGONAL moves
+		//Valid UP LEFT moves
 		nextMoves.addAll(getValidUpLeftMoves(board));
-				
-		//Valid BOTTOM RIGHT DIAGONAL moves
+		
+		//Valid DOWN RIGHT moves
 		nextMoves.addAll(getValidDownRightMoves(board));
-				
-		//Valid BOTTOM LEFT DIAGONAL moves
+		
+		//Valid DOWN LEFT moves
 		nextMoves.addAll(getValidDownLeftMoves(board));
-				
+		
 		return nextMoves;
 	}
-
 	
 	
 	
@@ -287,7 +242,7 @@ public class Queen extends ChessPiece{
 	 */
 	public boolean moveTo(int r, int c, ChessBoard board, Player p){
 		
-int moveSpot[] = {r, c};
+		int moveSpot[] = {r, c};
 		
 		ArrayList<int[]> validMoves = getNextMoves(board);
 		
@@ -387,5 +342,4 @@ int moveSpot[] = {r, c};
 		
 		return true;
 	}
-
 }

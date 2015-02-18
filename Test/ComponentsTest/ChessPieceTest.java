@@ -11,7 +11,7 @@ import org.junit.Test;
  * @author vishrutreddi
  *
  */
-public class PlayerTest {
+public class ChessPieceTest {
 
 	@Test
 	public void test() {

@@ -98,7 +98,15 @@ public class Player {
 	}
 	
 	
-	
+	/**
+	 * Sets the opponent player for the current player.
+	 * 
+	 * @param oppo
+	 */
+	public void setOpponent(Player oppo){
+		
+		this.opponent = oppo;
+	}
 	
 	/**
 	 * From the alive list of the player, it finds the current position of the
@@ -154,6 +162,7 @@ public class Player {
 	
 	
 	
+	//EMERGENCY:: NEEDS FIXING!!!
 	/**
 	 * Depending on the current board state/situation, this method returns a 
 	 * true or false result as to the player under attack is currently check-mate or 
@@ -165,6 +174,7 @@ public class Player {
 	public boolean isCheckMate(ChessBoard board){
 		
 		for(ChessPiece piece : this.alivePieces){
+			
 			
 			//If moves exist for any Piece
 			for(int[] move : piece.getNextValidMoves(board)){			
@@ -201,5 +211,27 @@ public class Player {
 	 */
 	public void removePieceFromList(ChessPiece p){
 		this.alivePieces.remove(p);
+	}
+	
+	
+	public void printStatus(ChessBoard board){
+		
+		System.out.println();
+		System.out.println("--------------------------" + this + "PIECES STATUS--------------------------------");
+		
+		//Get the List of Dead Pieces for the player
+		ArrayList<ChessPiece> graveyard = board.getGraveyard(team);
+		
+		for(ChessPiece p : alivePieces){		
+				int curPos[] = p.getCurrentPosition();
+				System.out.println("" + p.getClass() + ": ALIVE @ (" + curPos[0] +"," + curPos[1] + ")");
+		
+		}
+		for(ChessPiece p : graveyard){			
+				System.out.println(p.getClass() + ": DEAD X_X");			
+		}
+		
+		System.out.println("-------------------------------------------------------------------------");
+		
 	}
 }

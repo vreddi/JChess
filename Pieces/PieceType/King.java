@@ -37,6 +37,24 @@ public class King extends ChessPiece {
 		this.setCurrentPosition(-1, -1);
 	}
 	
+	
+	
+	/**
+	 * This parameterized constructor sets the position of the King associated with the
+	 * Chess-Piece. NOTE that the position assigned to the King is just the position that
+	 * the King is intended to be in. It has not been placed on the Chess Board with this
+	 * constructor.
+	 * 
+	 * @param r
+	 * @param c
+	 */
+	public King(int r, int c){
+	
+		this.setCurrentPosition(r, c);
+	}
+	
+	
+	
 	/**
 	 * This parameterized constructor sets the assigned color and the position of the 
 	 * King associated with the Chess-Piece. NOTE that the position assigned to the King
@@ -86,14 +104,18 @@ public class King extends ChessPiece {
 		int checkRow = curPos[0] + 1;
 		int checkCol = curPos[1];
 		
+		//Out of board attack, return empty list of valid moves
+		if(checkRow > 7 || checkCol > 7)
+			return nextMoves;
 		
-		//Can't move is it makes a check or check-mate situation
+		//Normal Move
 		if(board.spotOpen(checkRow, checkCol)){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);
 		}
+		
 		//Attacking Move
-		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkRow).getPieceColor()){
+		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkCol).getPieceColor()){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);			
 		}
@@ -120,13 +142,16 @@ public class King extends ChessPiece {
 		int checkCol = curPos[1] + 1;
 		
 		
-		//Can't move is it makes a check or check-mate situation
+		//Out of board attack, return empty list of valid moves
+		if(checkRow > 7 || checkCol > 7)
+			return nextMoves;
+		
 		if(board.spotOpen(checkRow, checkCol)){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);
 		}
 		//Attacking Move
-		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkRow).getPieceColor()){
+		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkCol).getPieceColor()){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);			
 		}
@@ -152,13 +177,17 @@ public class King extends ChessPiece {
 		int checkCol = curPos[1] - 1;
 		
 		
-		//Can't move is it makes a check or check-mate situation
+		//Out of board attack, return empty list of valid moves
+		if(checkRow > 7 || checkCol < 0)
+			return nextMoves;
+		
+		
 		if(board.spotOpen(checkRow, checkCol)){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);
 		}
 		//Attacking Move
-		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkRow).getPieceColor()){
+		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkCol).getPieceColor()){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);			
 		}
@@ -185,13 +214,17 @@ public class King extends ChessPiece {
 		int checkCol = curPos[1] + 1;
 		
 		
-		//Can't move is it makes a check or check-mate situation
+		//Out of board attack, return empty list of valid moves
+		if(checkCol > 7)
+			return nextMoves;
+				
+				
 		if(board.spotOpen(checkRow, checkCol)){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);
 		}
 		//Attacking Move
-		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkRow).getPieceColor()){
+		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkCol).getPieceColor()){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);			
 		}
@@ -219,13 +252,16 @@ public class King extends ChessPiece {
 		int checkCol = curPos[1];
 		
 		
-		//Can't move is it makes a check or check-mate situation
+		//Out of board attack, return empty list of valid moves
+		if(checkCol < 0 || checkRow < 0)
+			return nextMoves;
+				
 		if(board.spotOpen(checkRow, checkCol)){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);
 		}
 		//Attacking Move
-		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkRow).getPieceColor()){
+		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkCol).getPieceColor()){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);			
 		}
@@ -253,13 +289,16 @@ public class King extends ChessPiece {
 		int checkCol = curPos[1] + 1;
 		
 		
-		//Can't move is it makes a check or check-mate situation
+		//Out of board attack, return empty list of valid moves
+		if(checkRow < 0 || checkCol > 7)
+			return nextMoves;
+		
 		if(board.spotOpen(checkRow, checkCol)){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);
 		}
 		//Attacking Move
-		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkRow).getPieceColor()){
+		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkCol).getPieceColor()){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);			
 		}
@@ -287,13 +326,17 @@ public class King extends ChessPiece {
 		int checkCol = curPos[1] - 1;
 		
 		
-		//Can't move is it makes a check or check-mate situation
+		//Out of board attack, return empty list of valid moves
+		if(checkRow < 0 || checkCol < 0)
+			return nextMoves;
+				
+				
 		if(board.spotOpen(checkRow, checkCol)){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);
 		}
 		//Attacking Move
-		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkRow).getPieceColor()){
+		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkCol).getPieceColor()){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);			
 		}
@@ -321,13 +364,17 @@ public class King extends ChessPiece {
 		int checkCol = curPos[1] - 1;
 		
 		
+		//Out of board attack, return empty list of valid moves
+		if(checkCol < 0)
+			return nextMoves;
+		
 		//Can't move is it makes a check or check-mate situation
 		if(board.spotOpen(checkRow, checkCol)){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);
 		}
 		//Attacking Move
-		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkRow).getPieceColor()){
+		else if(this.getPieceColor() != board.getPieceAtSpot(checkRow, checkCol).getPieceColor()){
 			int validMove[] = {checkRow, checkCol};
 			nextMoves.add(validMove);			
 		}
@@ -393,31 +440,41 @@ public class King extends ChessPiece {
 	 */
 	public boolean moveTo(int r, int c, ChessBoard board, Player p){
 		
-		int moveSpot[] = {r, c};
-		
-		//Storing previous state
-		ChessBoard prevState = board;
+int moveSpot[] = {r, c};
 		
 		ArrayList<int[]> validMoves = getNextMoves(board);
 		
 		//Move is Valid
-		if(validMoves.contains(moveSpot)){
+		if(isInList(validMoves, moveSpot)){
 			
 			//If the Destination spot is unoccupied
 			/* Simply Occupy */
 			if(board.spotOpen(r,  c)){
 				
+				//Getting previous position (position before move)
 				int prevPos[] = this.getCurrentPosition();
+				int prevRow = prevPos[0];
+				int prevCol = prevPos[1];
+				
 				//Removed from previous spot
-				board.setPieceAtSpot(prevPos[0], prevPos[1], null);
+				board.removePieceFromSpot(prevRow, prevCol);
 				
 				//Moved to new Spot
 				board.setPieceAtSpot(r, c, this);
 				
 				/* If player is still under check :: Invalid move */
 				if(p.isCheck(board)){
-					System.out.println("Invalid Move");
-					board = prevState;
+					
+					//Log Invalid move in Console
+					System.out.println();
+					System.out.println("Invalid Move " + p + " is under Check!");
+					System.out.println();
+					
+					//Removed from new spot
+					board.removePieceFromSpot(r	, c);
+					//Set on the old spot
+					board.setPieceAtSpot(prevRow, prevCol, this);
+					
 					return false;
 				}
 			}
@@ -438,22 +495,37 @@ public class King extends ChessPiece {
 				}
 				
 				int prevPos[] = this.getCurrentPosition();
+				int prevRow = prevPos[0];
+				int prevCol = prevPos[1];
 				//Removed from previous spot
-				board.setPieceAtSpot(prevPos[0], prevPos[1], null);
+				board.removePieceFromSpot(prevRow, prevCol);
 
 				//Moved to new Spot
 				board.setPieceAtSpot(r, c, this);
 				
 				/* If player is still under check :: Invalid move */
 				if(p.isCheck(board)){
-					System.out.println("Invalid Move");
-					board = prevState;
+					
+					
+					ChessPiece revivedUnit;
 					
 					//Reviving the last piece put in the grave-yard
 					if(board.getPieceAtSpot(r, c).getPieceColor() == PieceColor.WHITE)
-						board.popGraveyard(PieceColor.WHITE);
+						revivedUnit = board.popGraveyard(PieceColor.BLACK);
 					else
-						board.popGraveyard(PieceColor.BLACK);
+						revivedUnit = board.popGraveyard(PieceColor.WHITE);
+					
+					//Log Invalid move in Console
+					System.out.println();
+					System.out.println("Invalid Move " + p + " is under Check!");
+					System.out.println();
+					
+					//Removed from new spot
+					board.removePieceFromSpot(r	, c);
+					//Set on the old spot
+					board.setPieceAtSpot(prevRow, prevCol, this);
+					
+					board.setPieceAtSpot(r, c, revivedUnit);
 					
 					return false;
 				}
@@ -462,7 +534,7 @@ public class King extends ChessPiece {
 		}
 		
 		else{
-			System.out.println("Invalid Move - Destination does not exist");
+			System.out.println("\n Invalid Move!");
 			return false;
 		}
 		

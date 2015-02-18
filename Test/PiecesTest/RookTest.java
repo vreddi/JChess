@@ -10,7 +10,10 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import Components.ChessBoard;
+import Components.ChessPiece;
 import Components.ChessPiece.PieceColor;
+import Components.Player;
+import PieceType.Pawn;
 import PieceType.Rook;
 
 /**
@@ -766,12 +769,138 @@ public class RookTest extends TestCase {
 	
 	
 	/**
+	 * In this test case the new game board with pieces at their initial position is set. 
+	 * The Rooks movement from a valid source to destination is tested. For the Rook, the attacking
+	 * move is checked, a normal move is checked and then an out of board move is tested.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void testMoveTo() throws Exception{
+	public void testMoveTo1() throws Exception{
 		
+		ChessBoard board = new ChessBoard();
+		Player p1 = new Player(PieceColor.WHITE);
+		Player p2 = new Player(PieceColor.BLACK);
+		
+		//Setting Opponents
+		p1.setOpponent(p2);
+		p2.setOpponent(p1);
+		
+		board.setNewGame(p1, p2);
+		
+		//Assigning test type in console
+		System.out.println("\n ------------------------- testMoveTo1 ------------------------------- \n");
+
+		Pawn friendly = (Pawn)board.getPieceAtSpot(1, 7);
+		board.removePieceFromSpot(1, 7);
+		board.setPieceAtSpot(3, 3, friendly);
+		
+		ChessPiece whiteRook = board.getPieceAtSpot(0, 7);
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		boolean moveSuccessful = whiteRook.validMoveTo(4, 7, board, p1);
+		
+		board.printBoardState();
+		
+		assertEquals(true, moveSuccessful);
+	
+		int rookCurPos[] = whiteRook.getCurrentPosition();
+
+		assertEquals(4, rookCurPos[0]);
+		assertEquals(7, rookCurPos[1]);
+		
+		//Attacking Move
+		moveSuccessful = whiteRook.validMoveTo(6, 7, board, p1);
+		assertEquals(true, moveSuccessful);
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		//Moving off the board
+		moveSuccessful = whiteRook.validMoveTo(6, 8, board, p1);
+		assertEquals(false, moveSuccessful);
+		
+		//Logging state in Console
+		board.printBoardState();
+	}
+	
+	
+	/**
+	 * In this test case the Rook is faced with a threat condition i.e when the King is under Check.
+	 * This test makes sure the correct implementation of the Rook's movement under this threat case.
+	 * The Rook cannot ignore the check condition. He must eliminate the condition or he cannot move, 
+	 * some-other move needs to be planned.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testMoveTo2() throws Exception{
+		
+		ChessBoard board = new ChessBoard();
+		Player p1 = new Player(PieceColor.WHITE);
+		Player p2 = new Player(PieceColor.BLACK);
+		
+		board.setNewGame(p1, p2);
+		
+		//Setting Opponents
+		p1.setOpponent(p2);
+		p2.setOpponent(p1);
+		
+		//Logging test type in console
+		System.out.println("\n ------------------------- testMoveTo2 ------------------------------- \n");
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		//Setting situation
+		ChessPiece enemyRook = board.getPieceAtSpot(7, 7);
+		ChessPiece friendlyRook = board.getPieceAtSpot(0,  7);
+		ChessPiece friendlyPawn = board.getPieceAtSpot(1, 4);
+		
+		board.removePieceFromSpot(1, 4);
+		board.setPieceAtSpot(2, 1, friendlyPawn);
+		
+		board.removePieceFromSpot(7, 7);
+		board.setPieceAtSpot(5, 4, enemyRook);
+		
+		board.removePieceFromSpot(0, 7);
+		board.setPieceAtSpot(5, 7, friendlyRook);
+		
+		//Logging state in Console
+		System.out.println("\n Moving Pieces to create a threat scene...");
+		board.printBoardState();
+		
+		
+		//Now the WHITE player is in check condition
+		//Sub-Test 1: Rook ignores the check condition by attacking
+		boolean moveSuccess = friendlyRook.validMoveTo(6, 7, board, p1); 
+		int curPos[] = friendlyRook.getCurrentPosition();
+		assertEquals(false, moveSuccess);
+		assertEquals(5,curPos[0]);
+		assertEquals(7, curPos[1]);
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		//Sub-Test 2: Rook ignores the check condition by doing a normal move
+		moveSuccess = friendlyRook.validMoveTo(4, 7, board, p1);
+		assertEquals(false, moveSuccess);
+		assertEquals(5,curPos[0]);
+		assertEquals(7, curPos[1]);
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		//Sub-Test 3: Rook attacks the Enemy Rook eliminating the threat.
+		moveSuccess = friendlyRook.validMoveTo(5, 4, board, p1);
+		assertEquals(true, moveSuccess);
+		assertEquals(5,curPos[0]);
+		assertEquals(4, curPos[1]);
+		
+		//Logging state in Console
+		board.printBoardState();		
 	}
 	
 	

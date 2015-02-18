@@ -285,29 +285,39 @@ public class Rook extends ChessPiece{
 		
 		int moveSpot[] = {r, c};
 		
-		//Storing previous state
-		ChessBoard prevState = board;
-		
 		ArrayList<int[]> validMoves = getNextMoves(board);
 		
 		//Move is Valid
-		if(validMoves.contains(moveSpot)){
+		if(isInList(validMoves, moveSpot)){
 			
 			//If the Destination spot is unoccupied
 			/* Simply Occupy */
 			if(board.spotOpen(r,  c)){
 				
+				//Getting previous position (position before move)
 				int prevPos[] = this.getCurrentPosition();
+				int prevRow = prevPos[0];
+				int prevCol = prevPos[1];
+				
 				//Removed from previous spot
-				board.setPieceAtSpot(prevPos[0], prevPos[1], null);
+				board.removePieceFromSpot(prevRow, prevCol);
 				
 				//Moved to new Spot
 				board.setPieceAtSpot(r, c, this);
 				
 				/* If player is still under check :: Invalid move */
 				if(p.isCheck(board)){
-					System.out.println("Invalid Move");
-					board = prevState;
+					
+					//Log Invalid move in Console
+					System.out.println();
+					System.out.println("Invalid Move " + p + " is under Check!");
+					System.out.println();
+					
+					//Removed from new spot
+					board.removePieceFromSpot(r	, c);
+					//Set on the old spot
+					board.setPieceAtSpot(prevRow, prevCol, this);
+					
 					return false;
 				}
 			}
@@ -328,22 +338,37 @@ public class Rook extends ChessPiece{
 				}
 				
 				int prevPos[] = this.getCurrentPosition();
+				int prevRow = prevPos[0];
+				int prevCol = prevPos[1];
 				//Removed from previous spot
-				board.setPieceAtSpot(prevPos[0], prevPos[1], null);
+				board.removePieceFromSpot(prevRow, prevCol);
 
 				//Moved to new Spot
 				board.setPieceAtSpot(r, c, this);
 				
 				/* If player is still under check :: Invalid move */
 				if(p.isCheck(board)){
-					System.out.println("Invalid Move");
-					board = prevState;
+					
+					
+					ChessPiece revivedUnit;
 					
 					//Reviving the last piece put in the grave-yard
 					if(board.getPieceAtSpot(r, c).getPieceColor() == PieceColor.WHITE)
-						board.popGraveyard(PieceColor.WHITE);
+						revivedUnit = board.popGraveyard(PieceColor.BLACK);
 					else
-						board.popGraveyard(PieceColor.BLACK);
+						revivedUnit = board.popGraveyard(PieceColor.WHITE);
+					
+					//Log Invalid move in Console
+					System.out.println();
+					System.out.println("Invalid Move " + p + " is under Check!");
+					System.out.println();
+					
+					//Removed from new spot
+					board.removePieceFromSpot(r	, c);
+					//Set on the old spot
+					board.setPieceAtSpot(prevRow, prevCol, this);
+					
+					board.setPieceAtSpot(r, c, revivedUnit);
 					
 					return false;
 				}
@@ -352,7 +377,7 @@ public class Rook extends ChessPiece{
 		}
 		
 		else{
-			System.out.println("Invalid Move - Destination does not exist");
+			System.out.println("\n Invalid Move!");
 			return false;
 		}
 		

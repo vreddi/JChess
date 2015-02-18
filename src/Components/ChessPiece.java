@@ -1,6 +1,7 @@
 package Components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import PieceType.Bishop;
 import PieceType.King;
@@ -98,36 +99,33 @@ public class ChessPiece {
 		
 		ArrayList<int[]> nextMoves = new ArrayList<int[]>();
 		
-		/* Collect Current position of the Piece */
-		int[] piecePos = this.getCurrentPosition();
-		
 		if(this.getClass().equals(PieceType.King.class)){
-			King k = new King(this.getPieceColor(), piecePos[0], piecePos[1]);
+			King k = (King)this;
 			nextMoves = k.getNextMoves(board);
 		}
 		
 		else if(this.getClass().equals(PieceType.Queen.class)){
-			Queen q = new Queen(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Queen q = (Queen)this;
 			nextMoves = q.getNextMoves(board);
 		}
 		
 		
 		else if(this.getClass().equals(PieceType.Bishop.class)){
-			Bishop b = new Bishop(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Bishop b = (Bishop)this;
 			nextMoves = b.getNextMoves(board);
 		}
 		
 		else if(this.getClass().equals(PieceType.Knight.class)){
-			Knight k = new Knight(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Knight k = (Knight)this;
 			nextMoves = k.getNextMoves(board);
 		}
 		
 		else if(this.getClass().equals(PieceType.Rook.class)){
-			Rook r = new Rook(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Rook r = (Rook)this;
 			nextMoves = r.getNextMoves(board);
 		}
 		else{
-			Pawn p = new Pawn(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Pawn p = (Pawn)this;
 			nextMoves = p.getNextMoves(board);
 		}
 		
@@ -145,40 +143,54 @@ public class ChessPiece {
 	 * @return true/false
 	 */
 	public boolean validMoveTo(int row, int col, ChessBoard board, Player p){
-				
-		/* Collect Current position of the Piece */
-		int[] piecePos = this.getCurrentPosition();
 		
 		if(this.getClass().equals(PieceType.King.class)){
-			King k = new King(this.getPieceColor(), piecePos[0], piecePos[1]);
+			King k = (King)this;
 			return k.moveTo(row, col, board, p);
 		}
 		
 		else if(this.getClass().equals(PieceType.Queen.class)){
-			Queen q = new Queen(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Queen q = (Queen)this;
 			return q.moveTo(row, col, board, p);
 		}
 		
 		
 		else if(this.getClass().equals(PieceType.Bishop.class)){
-			Bishop b = new Bishop(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Bishop b = (Bishop)this;
 			return b.moveTo(row, col, board, p);
 		}
 		
 		else if(this.getClass().equals(PieceType.Knight.class)){
-			Knight k = new Knight(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Knight k = (Knight)this;
 			return k.moveTo(row, col, board, p);
 		}
 		
 		else if(this.getClass().equals(PieceType.Rook.class)){
-			Rook r = new Rook(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Rook r = (Rook)this;
 			return r.moveTo(row, col, board, p);
 		}
 		else{
-			Pawn s = new Pawn(this.getPieceColor(), piecePos[0], piecePos[1]);
+			Pawn s = (Pawn)this;
 			return s.moveTo(row, col, board, p);
 		}
 		
 	}
+	
+	
+	/**
+	 * 
+	 * @param list
+	 * @param candidate
+	 * @return true/false
+	 */
+	public static boolean isInList(final ArrayList<int[]> list, final int[] candidate){
+
+		    for(final int[] item : list){
+		        if(Arrays.equals(item, candidate)){
+		            return true;
+		        }
+		    }
+		    return false;
+		}
 }
 

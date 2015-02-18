@@ -11,7 +11,7 @@ import org.junit.Test;
  * @author vishrutreddi
  *
  */
-public class KingTest {
+public class PrincessTest {
 
 	@Test
 	public void test() {

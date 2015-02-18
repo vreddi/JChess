@@ -10,12 +10,16 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import Components.ChessBoard;
+import Components.ChessPiece;
+import Components.Player;
 import Components.ChessPiece.PieceColor;
 import PieceType.Pawn;
-import PieceType.Rook;
 
 /**
- * @author vishrutreddi
+ * This is the Test File for Pawn.java. Every functionality/method of the Rook Class
+ * is tested in this class with edge cases.
+ * 
+ * @author Vishrut Reddi
  *
  */
 public class PawnTest extends TestCase{
@@ -63,7 +67,7 @@ public class PawnTest extends TestCase{
 	
 	/**
 	 * To pass this test the created Rook through the constructor taking in a color,
-	 * row and column as Rooks attributes should actually match the Objects properties.
+	 * row and column as Pawn's attributes should actually match the Objects properties.
 	 * Both the color and current position is verified for this test. If all match only then 
 	 * the test passes. NOTE: by setting the position of the piece it is no actually
 	 * set on the Chess Board.
@@ -637,13 +641,156 @@ public class PawnTest extends TestCase{
 	/* -----------------------------------ATTACKING TESTS END HERE------------------------------------ */
 	
 	/* ######################### BLACK PAWN MOVEMENT TESTS END HERE ########################## */
+	
+	
 	/**
+	 * In this test case the new game board with pieces at their initial position is set. 
+	 * The Pawn's movement from a valid source to destination is tested. For the Pawn, normal moves
+	 * are checked including initial special move, normal straight move, straight invalid attacking
+	 * move and out of the board move.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void testMoveTo() throws Exception{
+	public void testMoveTo1() throws Exception{
 		
+		ChessBoard board = new ChessBoard();
+		Player p1 = new Player(PieceColor.WHITE);
+		Player p2 = new Player(PieceColor.BLACK);
+		
+		//Setting Opponents
+		p1.setOpponent(p2);
+		p2.setOpponent(p1);
+		
+		board.setNewGame(p1, p2);
+		
+		//Assigning test type in console
+		System.out.println("\n ------------------------- testMoveTo1 ------------------------------- \n");
+
+		Pawn pawn = (Pawn)board.getPieceAtSpot(1, 4);
+	
+		int pawnCurPos[] = pawn.getCurrentPosition();
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		//Sub-Test 1: Checking Special Initial Pawn Move
+		boolean moveSuccessful = pawn.validMoveTo(3, 4, board, p1);
+		
+		board.printBoardState();
+		
+		assertEquals(true, moveSuccessful);
+		assertEquals(3, pawnCurPos[0]);
+		assertEquals(4, pawnCurPos[1]);
+		
+		//Sub-Test 2: Normal Straight Move
+		moveSuccessful = pawn.validMoveTo(4, 4, board, p1);
+		assertEquals(true, moveSuccessful);
+		assertEquals(4, pawnCurPos[0]);
+		assertEquals(4, pawnCurPos[1]);
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		//Sub-Test 3: Invalid Move (Can't move straight into enemy unit)
+		moveSuccessful = pawn.validMoveTo(5, 4, board, p1);
+		moveSuccessful = pawn.validMoveTo(6, 4, board, p1);
+		assertEquals(false, moveSuccessful);
+		assertEquals(5, pawnCurPos[0]);
+		assertEquals(4, pawnCurPos[1]);
+		
+		//Sub-Test 4: Moving off the board and also invalid attack move
+		ChessPiece pawn2 = board.getPieceAtSpot(1, 7);
+		moveSuccessful = pawn2.validMoveTo(2, 8, board, p1);
+		pawnCurPos = pawn2.getCurrentPosition();
+		assertEquals(false, moveSuccessful);
+		assertEquals(1, pawnCurPos[0]);
+		assertEquals(7, pawnCurPos[1]);
+		
+		//Logging state in Console
+		board.printBoardState();
 	}
+	
+	
+	/**
+	 * In this test case the Pawn is faced with a threat condition i.e when the King is under Check.
+	 * This test makes sure the correct implementation of the Pawn's movement under this threat case.
+	 * The Pawn cannot ignore the check condition. He must eliminate the condition or he cannot move, 
+	 * some-other move needs to be planned.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testMoveTo2() throws Exception{
+		
+		ChessBoard board = new ChessBoard();
+		Player p1 = new Player(PieceColor.WHITE);
+		Player p2 = new Player(PieceColor.BLACK);
+		
+		board.setNewGame(p1, p2);
+		
+		//Setting Opponents
+		p1.setOpponent(p2);
+		p2.setOpponent(p1);
+		
+		//Logging test type in console
+		System.out.println("\n ------------------------- testMoveTo2 ------------------------------- \n");
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		//Setting situation
+		ChessPiece enemyRook = board.getPieceAtSpot(7, 7);
+		ChessPiece friendlyPawn = board.getPieceAtSpot(1, 4);
+		
+		board.removePieceFromSpot(1, 4);
+		board.setPieceAtSpot(4, 3, friendlyPawn);
+		
+		board.removePieceFromSpot(7, 7);
+		board.setPieceAtSpot(5, 4, enemyRook);
+		
+		//Logging state in Console
+		System.out.println("\n Moving Pieces to create a threat scene...");
+		board.printBoardState();
+		
+		
+		//Now the WHITE player is in check condition
+		//Sub-Test 1: Pawn ignores the check condition by doing a normal move
+		boolean moveSuccess = friendlyPawn.validMoveTo(5, 3, board, p1); 
+		int curPos[] = friendlyPawn.getCurrentPosition();
+		assertEquals(false, moveSuccess);
+		assertEquals(4,curPos[0]);
+		assertEquals(3, curPos[1]);
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		//Sub-Test 2: Pawn ignores the check condition by doing an attack
+		ChessPiece enemyPawn = board.getPieceAtSpot(6, 2);
+		enemyPawn.validMoveTo(5, 2, board, p2);
+		
+		//Logging state in Console
+		board.printBoardState();
+				
+		moveSuccess = friendlyPawn.validMoveTo(5, 2, board, p1);
+		assertEquals(false, moveSuccess);
+		assertEquals(4,curPos[0]);
+		assertEquals(3, curPos[1]);
+		
+		//Logging state in Console
+		board.printBoardState();
+		
+		//Sub-Test 3: Pawn attacks the Enemy Rook eliminating the threat.
+		moveSuccess = friendlyPawn.validMoveTo(5, 4, board, p1);
+		assertEquals(true, moveSuccess);
+		assertEquals(5,curPos[0]);
+		assertEquals(4, curPos[1]);
+		
+		//Logging state in Console
+		board.printBoardState();		
+		p1.printStatus(board);
+		p2.printStatus(board);
+	}
+	
 
 }

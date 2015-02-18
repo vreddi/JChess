@@ -10,7 +10,9 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import Components.ChessBoard;
+import Components.ChessPiece;
 import Components.ChessPiece.PieceColor;
+import Components.Player;
 import PieceType.Queen;
 
 /**
@@ -888,14 +890,184 @@ public class QueenTest extends TestCase {
 	
 	
 	/**
+	 * In this test case all the normal valid Moves are checked for the Queen and the
+	 * state of the board is verified to check if the Queen actually shifted places.
+	 * Out of board moves is checked here,Invalid Jumping move is checked here and definitely
+	 * normal straight and diagonal moves are checked here. Attacking Moves are handled in
+	 * another test.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void testMoveTo() throws Exception{
+	public void testMoveTo1() throws Exception{
+		
+		ChessBoard board = new ChessBoard();
+		Player p1 = new Player(PieceColor.WHITE);
+		Player p2 = new Player(PieceColor.BLACK);
+		
+		p1.setOpponent(p2);
+		p2.setOpponent(p1);
+		
+		board.setNewGame(p1, p2);
+		
+		System.out.println("\n ---------------------- testMoveTo1 ------------------------------------ \n");
+		
+		//Log Board State in Console
+		board.printBoardState();
+		
+		//Moved the pawn to clear Queens Path
+		ChessPiece friendlyPawn = board.getPieceAtSpot(1, 3);
+		board.removePieceFromSpot(1, 3);
+		board.setPieceAtSpot(2, 0, friendlyPawn);
+		
+		//Log Board State in Console
+		board.printBoardState();
+		
+		ChessPiece queen = board.getPieceAtSpot(0, 3);
+		
+		//Sub-Test 1: Normal Straight Move
+		boolean moveSuccess = queen.validMoveTo(5, 3, board, p1);
+		int queenPos[] = queen.getCurrentPosition();
+		assertEquals(true, moveSuccess);
+		assertEquals(5, queenPos[0]);
+		assertEquals(3, queenPos[1]);
+		
+		//Log Board State in Console
+		board.printBoardState();
+		
+		//Sub-Test 2: Normal Diagonal Right Bottom Move
+		moveSuccess = queen.validMoveTo(3, 5, board, p1);
+		assertEquals(true, moveSuccess);
+		assertEquals(3, queenPos[0]);
+		assertEquals(5, queenPos[1]);
+		
+		//Log Board State in Console
+		board.printBoardState();
+		
+		//Sub-Test 3: Invalid Move
+		moveSuccess = queen.validMoveTo(7, 3, board, p1);
+		assertEquals(false, moveSuccess);
+		assertEquals(3, queenPos[0]);
+		assertEquals(5, queenPos[1]);
+		
+		//Log Board State in Console
+		board.printBoardState();
+		
+		//Sub-Test 4: Out of Board Move
+		moveSuccess = queen.validMoveTo(6, 8, board, p1);
+		assertEquals(false, moveSuccess);
+		assertEquals(3, queenPos[0]);
+		assertEquals(5, queenPos[1]);
+		
+		//Log Board State in Console
+		board.printBoardState();
 		
 	}
 
+	
+	/**
+	 * In this test case all the attacking valid Moves are checked for the Queen and the
+	 * state of the board is verified to check if the Queen actually shifted places.
+	 * This test makes sure the correct implementation of the Queen's movement under this threat case.
+	 * The Queen cannot ignore the check condition. She must eliminate the condition or he cannot move, 
+	 * some-other move needs to be planned.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testMoveTo2() throws Exception{
+		
+		ChessBoard board = new ChessBoard();
+		Player p1 = new Player(PieceColor.WHITE);
+		Player p2 = new Player(PieceColor.BLACK);
+		
+		p1.setOpponent(p2);
+		p2.setOpponent(p1);
+		
+		board.setNewGame(p1, p2);
+		
+		System.out.println("\n ---------------------- testMoveTo2 ------------------------------------ \n");
+		
+		//Log Board State in Console
+		board.printBoardState();
+		
+		//Moved the pawn to clear Queens Path
+		ChessPiece friendlyPawn = board.getPieceAtSpot(1, 3);
+		board.removePieceFromSpot(1, 3);
+		board.setPieceAtSpot(2, 0, friendlyPawn);
+		friendlyPawn = board.getPieceAtSpot(1, 4);
+		board.removePieceFromSpot(1, 4);
+		board.setPieceAtSpot(3, 0, friendlyPawn);
+		
+		
+		//Log Board State in Console
+		board.printBoardState();
+		
+		ChessPiece queen = board.getPieceAtSpot(0, 3);
+		
+		//Sub-Test 1: Normal Straight Move
+		boolean moveSuccess = queen.validMoveTo(6, 3, board, p1);
+		int queenPos[] = queen.getCurrentPosition();
+		assertEquals(true, moveSuccess);
+		assertEquals(6, queenPos[0]);
+		assertEquals(3, queenPos[1]);
+		
+		//Log Board State in Console
+		board.printBoardState();
+		//Log Opponent Piece Status
+		p2.printStatus(board);
+		
+		//Killing the opponent Queen
+		moveSuccess = queen.validMoveTo(7, 3, board, p1);
+		assertEquals(true, moveSuccess);
+		assertEquals(7, queenPos[0]);
+		assertEquals(3, queenPos[1]);
+		
+		//Log Board State in Console
+		board.printBoardState();
+		//Log Opponent Piece Status
+		p2.printStatus(board);
+		
+		//Killing the opponent Pawn
+		moveSuccess = queen.validMoveTo(6, 4, board, p1);
+		assertEquals(true, moveSuccess);
+		assertEquals(6, queenPos[0]);
+		assertEquals(4, queenPos[1]);
+				
+		//Log Board State in Console
+		board.printBoardState();
+		//Log Opponent Piece Status
+		p2.printStatus(board);
+		
+		//Creating Threat Case
+		ChessPiece enemyRook = board.getPieceAtSpot(7, 7);
+		board.removePieceFromSpot(7, 7);
+		board.setPieceAtSpot(5, 4, enemyRook);
+		
+		//Ignore Threat
+		//Killing the opponent Pawn
+		moveSuccess = queen.validMoveTo(6, 4, board, p1);
+		assertEquals(false, moveSuccess);
+		assertEquals(6, queenPos[0]);
+		assertEquals(4, queenPos[1]);
+						
+		//Log Board State in Console
+		board.printBoardState();
+		//Log Opponent Piece Status
+		p2.printStatus(board);
+	
+		//Counter Threat
+		//Killing the threatening Rook
+		moveSuccess = queen.validMoveTo(5, 4, board, p1);
+		assertEquals(true, moveSuccess);
+		assertEquals(5, queenPos[0]);
+		assertEquals(4, queenPos[1]);
+								
+		//Log Board State in Console
+		board.printBoardState();
+		//Log Opponent Piece Status
+		p2.printStatus(board);
+	}
 }
 
 

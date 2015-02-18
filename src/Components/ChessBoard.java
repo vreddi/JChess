@@ -148,6 +148,22 @@ public class ChessBoard {
 	
 	
 	
+	/**
+	 * Get the Grave-yard, i.r the list of all the pieces who are dead.The list is provided
+	 * of white or black pieces based on the parameter passed.
+	 * 
+	 * @param color
+	 * @return List of dead pieces
+	 */
+	public ArrayList<ChessPiece> getGraveyard(PieceColor color){
+		
+		if(color == PieceColor.WHITE)
+			return whiteGraveyard;
+		
+		else
+			return blackGraveyard;
+	}
+	
 	
 	/**
 	 * Resets all the pieces of a particular which is specified i.e WHITE
@@ -217,8 +233,7 @@ public class ChessBoard {
 		p.recruitPiece(board[secondRow][6]);
 		board[secondRow][7] = new Pawn(color, secondRow, 7);
 		p.recruitPiece(board[secondRow][7]);
-		
-		
+
 	}
 
 	
@@ -252,16 +267,17 @@ public class ChessBoard {
 	 * to the grave-yard.
 	 * 
 	 * @param color
+	 * @return Recently killed ChessPiece
 	 */
-	public void popGraveyard(PieceColor color){
+	public ChessPiece popGraveyard(PieceColor color){
 		
 		//R.I.P WHITE Piece
 		if(color == PieceColor.WHITE)
-			whiteGraveyard.remove(whiteGraveyard.size() -1);
+			return whiteGraveyard.remove(whiteGraveyard.size() -1);
 				
 		//R.I.P BLACK Piece
 		else
-			blackGraveyard.remove(blackGraveyard.size() - 1);
+			return blackGraveyard.remove(blackGraveyard.size() - 1);
 		
 	}
 	
@@ -284,4 +300,52 @@ public class ChessBoard {
 			blackGraveyard.add(deadPiece);
 		
 	}
+	
+	
+	/**
+	 * Logs the state of the Chess-Board on the Console. Displays every empty spot and
+	 * every spot with corresponding Chess-Piece.
+	 * 
+	 */
+	public void printBoardState(){
+		
+		System.out.println();
+		
+		for(int row = board.length - 1; row >= 0; row--){
+			
+			for(int col = 0; col < board[0].length; col++){
+				
+				if(this.spotOpen(row, col))
+					System.out.print('-');
+				else{
+					
+					ChessPiece piece = this.getPieceAtSpot(row,  col);
+					
+					if(piece.getClass().equals(PieceType.King.class))
+						System.out.print('K');
+						
+					else if(piece.getClass().equals(PieceType.Queen.class))
+							System.out.print('Q');
+							
+					else if(piece.getClass().equals(PieceType.Bishop.class))
+						System.out.print('b');
+					
+					else if(piece.getClass().equals(PieceType.Knight.class))
+						System.out.print('k');
+					
+					else if(piece.getClass().equals(PieceType.Pawn.class))
+						System.out.print('p');
+					
+					else if(piece.getClass().equals(PieceType.Rook.class))
+						System.out.print('r');
+				}
+
+				System.out.print(" ");
+			}
+			
+			System.out.println();
+		}
+	}
+	
+	
 }	
