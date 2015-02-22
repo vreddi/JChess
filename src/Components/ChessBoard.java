@@ -30,7 +30,7 @@ public class ChessBoard {
 	ArrayList<ChessPiece> blackGraveyard = new ArrayList<ChessPiece>();
 		
 	/**
-	 * Default COnstructor
+	 * Default Constructor
 	 */
 	public ChessBoard(){
 	}
@@ -147,9 +147,78 @@ public class ChessBoard {
 	}
 	
 	
+	public ChessBoard shallowCopyBoard(){
+		
+		ChessBoard copy = new ChessBoard();
+		
+		for(int row = 0; row < 8; row++){
+			for(int col = 0; col < 8; col++){
+				copy.board[row][col] = this.board[row][col];
+			}
+		}
+		
+		return copy;
+	}
 	
 	/**
-	 * Get the Grave-yard, i.r the list of all the pieces who are dead.The list is provided
+	 * Copies the original chess board state and creates a new chess board
+	 * with the same state. THis Deep copy would create a new board with new individual pieces,
+	 * such that edit to this wont effect or alter the original
+	 * 
+	 * @return Copy Chess Board
+	 */
+	public ChessBoard deepCopyBoard(){
+		
+		ChessBoard copy = new ChessBoard();
+		
+		for(int row = 0; row < 8; row++){
+			for(int col = 0; col < 8; col++){
+				if(this.spotOpen(row, col)){
+					copy.board[row][col] = null;
+				}
+				else{
+					
+					ChessPiece piece = this.getPieceAtSpot(row,  col);
+					
+					if(piece.getClass().equals(PieceType.King.class)){
+						King king = new King(this.getPieceAtSpot(row, col).getPieceColor());
+						copy.setPieceAtSpot(row, col, king);
+					}
+										
+					else if(piece.getClass().equals(PieceType.Queen.class)){
+						Queen queen = new Queen(this.getPieceAtSpot(row, col).getPieceColor());
+						copy.setPieceAtSpot(row, col, queen);
+					}
+							
+					else if(piece.getClass().equals(PieceType.Bishop.class)){
+						Bishop bishop = new Bishop(this.getPieceAtSpot(row, col).getPieceColor());
+						copy.setPieceAtSpot(row, col, bishop);
+					}
+					
+					else if(piece.getClass().equals(PieceType.Knight.class)){
+						Knight knight = new Knight(this.getPieceAtSpot(row, col).getPieceColor());
+						copy.setPieceAtSpot(row, col, knight);
+					}
+					
+					else if(piece.getClass().equals(PieceType.Pawn.class)){
+						Pawn pawn = new Pawn(this.getPieceAtSpot(row, col).getPieceColor());
+						copy.setPieceAtSpot(row, col, pawn);
+					}
+					
+					else if(piece.getClass().equals(PieceType.Rook.class)){
+						Rook rook = new Rook(this.getPieceAtSpot(row, col).getPieceColor());
+						copy.setPieceAtSpot(row, col, rook);
+					}
+				}
+			}
+		}
+		return copy;
+	}
+	
+	
+	
+	/**
+	 * Get the Grave-yard, for the list of all the pieces who are dead.The list is provided
 	 * of white or black pieces based on the parameter passed.
 	 * 
 	 * @param color

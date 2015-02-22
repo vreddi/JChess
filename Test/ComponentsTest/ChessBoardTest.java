@@ -181,6 +181,40 @@ public class ChessBoardTest extends TestCase {
 				
 	}
 	
+	/**
+	 * Visually See the Result on the Console to verify the test. (Manual Testing)
+	 * @throws Exception
+	 */
+	@Test
+	public void testCopyBoard() throws Exception{
+		ChessBoard copy;
+		ChessBoard board = new ChessBoard();
+		Player p1 = new Player(PieceColor.WHITE);
+		Player p2 = new Player(PieceColor.BLACK);
+		
+		//Logging in Console
+		System.out.println("\n ------------------------- testCopyBoard() ------------------------- \n");
+		
+		p1.setOpponent(p2);
+		p2.setOpponent(p1);
+		
+		//Setting new chess game between Player p1 and Player p2
+		board.setNewGame(p1, p2);
+		
+		board.getPieceAtSpot(1, 4).validMoveTo(3, 4, board, p1);
+		board.getPieceAtSpot(6,  5).validMoveTo(4, 5, board, p2);
+		
+		//Login state in console
+		System.out.println("Original: \n");
+		board.printBoardState();
+		
+		copy = board.deepCopyBoard();
+		
+		//Login state in console
+		System.out.println("\n Copied: \n");
+		copy.printBoardState();		
+		
+	}
 	
 	/**
 	 * 

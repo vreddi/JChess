@@ -40,6 +40,11 @@ public class ChessPiece {
 	}
 	
 	
+	
+	public ChessPiece(PieceColor color){
+		pieceColor = color;
+	}
+	
 	/**
 	 * Returns the color of the Chess Piece.
 	 * 

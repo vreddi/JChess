@@ -108,6 +108,32 @@ public class Player {
 		this.opponent = oppo;
 	}
 	
+	
+	/**
+	 * Creates a new list of alive pieces for a particular player. All the pieces on the board,
+	 * currently alive for the required player are returned in a list.
+	 * 
+	 * @param board
+	 * @return List of alive pieces for a player
+	 */
+	public ArrayList<ChessPiece> getCurAliveList(ChessBoard board){
+		
+		ArrayList<ChessPiece> newAliveList = new ArrayList<ChessPiece>();
+		
+		for(int row = 0; row < 8; row ++){
+			for(int col = 0; col < 8; col ++){
+				
+				//If Player's Piece is found and the spot is not empty
+				if(!board.spotOpen(row, col) && this.team == board.getPieceAtSpot(row, col).getPieceColor()){
+					newAliveList.add(board.getPieceAtSpot(row, col));
+				}
+			}
+		}
+		return newAliveList;
+	}
+	
+	
+	
 	/**
 	 * From the alive list of the player, it finds the current position of the
 	 * player's King Piece on the board. This position is returned. If king is not
@@ -143,13 +169,13 @@ public class Player {
 	public boolean isCheck(ChessBoard board){
 		
 		Player enemy = this.getOpponent();
-		int[] kingsPos = this.getKingsCurPosition();
+		int[] kingPos = this.getKingsCurPosition();
 		
 		for(ChessPiece piece : enemy.alivePieces){
 			
 			for(int[] move : piece.getNextValidMoves(board)){
-				
-				if(move[0] == kingsPos[0] && move[1] == kingsPos[1]){
+
+				if(move[0] == kingPos[0] && move[1] == kingPos[1]){
 					return true;
 				}
 				
@@ -159,8 +185,6 @@ public class Player {
 		
 		return false;
 	}
-	
-	
 	
 	//EMERGENCY:: NEEDS FIXING!!!
 	/**
@@ -173,31 +197,42 @@ public class Player {
 	 */
 	public boolean isCheckMate(ChessBoard board){
 		
-		for(ChessPiece piece : this.alivePieces){
+		ChessBoard emulatedBoard = new ChessBoard();
+		Player emulatedP1 = new Player();			/* Trying to get out of CHeck */
+		Player emulatedP2 = new Player();			/* Trying for Check-Mate */
+		
+		emulatedBoard = board.deepCopyBoard();
+		emulatedP1.setOpponent(emulatedP2);
+		emulatedP2.setOpponent(emulatedP1);
+		
+		//Copying Player Teams
+		emulatedP1.team = this.getPlayerColor();
+		emulatedP2.team = this.getOpponent().getPlayerColor();
+		
+		//Creating Alive List of Pieces for the new Emulated Copied Board
+		emulatedP1.alivePieces = this.getCurAliveList(emulatedBoard);
+		emulatedP2.alivePieces = this.getOpponent().getCurAliveList(emulatedBoard);
+		
+		for(ChessPiece piece : emulatedP1.alivePieces){
 			
+			//emulatedBoard = board.shallowCopyBoard();
 			
-			//If moves exist for any Piece
-			for(int[] move : piece.getNextValidMoves(board)){			
+			for(int[] move : piece.getNextValidMoves(emulatedBoard)){
 				
-				ChessBoard checkBoard = board;
+				piece.validMoveTo(move[0], move[1], emulatedBoard, emulatedP1);
 				
-				if(piece.validMoveTo(move[0], move[1], checkBoard, this)){
-					
-					/* If not in Check with the Move i.e Not CheckMate*/
-					if(!this.isCheck(checkBoard))
-						return false;
-				}
+				System.out.println("Move Tried: " + piece.getClass() + " " + move[0] + "," + move[1]);
+				emulatedBoard.printBoardState();
+				emulatedP1.printStatus(emulatedBoard);
+				emulatedP2.printStatus(emulatedBoard);
 				
+				if(!emulatedP1.isCheck(emulatedBoard))
+					return false;
 			}
-			
-		}	
+		}
 		
-		if(this.isCheck(board))
-			return true;
 		
-		//Stale-mate has occurred
-		else
-			return false;
+		return true;
 		
 	}
 

@@ -440,7 +440,7 @@ public class King extends ChessPiece {
 	 */
 	public boolean moveTo(int r, int c, ChessBoard board, Player p){
 		
-int moveSpot[] = {r, c};
+		int moveSpot[] = {r, c};
 		
 		ArrayList<int[]> validMoves = getNextMoves(board);
 		
@@ -505,8 +505,7 @@ int moveSpot[] = {r, c};
 				
 				/* If player is still under check :: Invalid move */
 				if(p.isCheck(board)){
-					
-					
+										
 					ChessPiece revivedUnit;
 					
 					//Reviving the last piece put in the grave-yard
