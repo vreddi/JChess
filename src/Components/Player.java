@@ -21,6 +21,9 @@ public class Player {
 	
 	ArrayList<ChessPiece> alivePieces = new ArrayList<ChessPiece>();	//List of alive pieces for the player
 	
+	ArrayList<ChessPiece> prevAlivePieces = new ArrayList<ChessPiece>();		//List of alive pieces in the previous move
+	
+	
 	
 	/**
 	 * Default Constructor
@@ -73,6 +76,17 @@ public class Player {
 	}
 	
 
+	/**
+	 * When the Player wants to start fresh, then all the pieces from the grave-yard
+	 * must be removed and all the pieces must exist in the alive list. This function creates
+	 * a new alive list which would be empty. The board needs to be set to fill in the pieces.
+	 * 
+	 * Note: The board can be filled by startNewGame() in ChessBoard.java
+	 */
+	public void startFresh(){
+		
+		alivePieces = new ArrayList<ChessPiece>();
+	}
 	
 	
 	/**
@@ -108,6 +122,23 @@ public class Player {
 		this.opponent = oppo;
 	}
 	
+	/**
+	 * This method Undo all the Components of the Player.
+	 */
+	public void playerUndo(){
+		
+		//Create Previous List of alive pieces
+		setPrevAliveList(alivePieces);
+		
+		//Clearing the list
+		alivePieces.clear();
+		
+		//Adding previous state alive pieces to the current list
+		for(ChessPiece piece : prevAlivePieces){
+			alivePieces.add(piece);
+		}
+	}
+	
 	
 	/**
 	 * Creates a new list of alive pieces for a particular player. All the pieces on the board,
@@ -132,6 +163,37 @@ public class Player {
 		return newAliveList;
 	}
 	
+	
+	/**
+	 * This method helps store the alive pieces for a previous move for the player.
+	 * This method would be helpful for if the player chooses to undo his/her move.
+	 * This method basically takes the a list of pieces and makes that list the previously
+	 * alive pieces list.
+	 * 
+	 * NOTE: Make sure to call this method BEFORE a player makes a move.
+	 */
+	public void setPrevAliveList(ArrayList<ChessPiece> aliveList){
+		
+		//Clear the previously stored pieces
+		prevAlivePieces.clear();
+		
+		//Store the pieces in the previous alive list
+		for(ChessPiece piece : aliveList){
+			prevAlivePieces.add(piece);
+		}
+	}
+	
+	
+	/**
+	 * This method provides the list of alive chess pieces on the board for the player
+	 * in the players previous move.
+	 * 
+	 * @return
+	 */
+	public ArrayList<ChessPiece> getPrevAliveList(){
+		
+		return prevAlivePieces;
+	}
 	
 	
 	/**
@@ -198,7 +260,7 @@ public class Player {
 	public boolean isCheckMate(ChessBoard board){
 		
 		ChessBoard emulatedBoard = new ChessBoard();
-		Player emulatedP1 = new Player();			/* Trying to get out of CHeck */
+		Player emulatedP1 = new Player();			/* Trying to get out of Check */
 		Player emulatedP2 = new Player();			/* Trying for Check-Mate */
 		
 		emulatedBoard = board.deepCopyBoard();
@@ -213,6 +275,7 @@ public class Player {
 		emulatedP1.alivePieces = this.getCurAliveList(emulatedBoard);
 		emulatedP2.alivePieces = this.getOpponent().getCurAliveList(emulatedBoard);
 		
+
 		for(ChessPiece piece : emulatedP1.alivePieces){
 			
 			//emulatedBoard = board.shallowCopyBoard();

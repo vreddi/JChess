@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import PieceType.Bishop;
+import PieceType.Empress;
 import PieceType.King;
 import PieceType.Knight;
 import PieceType.Pawn;
+import PieceType.Princess;
 import PieceType.Queen;
 import PieceType.Rook;
 
@@ -19,13 +21,16 @@ import PieceType.Rook;
 
 public class ChessPiece {
 		
-
+	//A Chess Piece can ONLY be black or white in color
 	public enum PieceColor{
 		BLACK, WHITE
 	}
 
 	//Color of the Piece
 	private PieceColor pieceColor;
+	
+	//Code that uniquely identifies a piece
+	private String pieceCode;
 	
 	//Current Position of the CHess Piece
 	// 0th ele -> row
@@ -75,6 +80,27 @@ public class ChessPiece {
 	 */
 	public int[] getCurrentPosition(){		
 		return this.curPos;
+	}
+	
+	
+	/**
+	 * Helps set a unique code for each piece. For each piece this method should be 
+	 * called separately.
+	 * 
+	 * @param code
+	 */
+	public void setPieceCode(String code){
+		
+		pieceCode = code;
+	}
+	
+	/**
+	 * Provides the user with the code of the piece requested.
+	 * 
+	 * @return
+	 */
+	public String getPieceCode(){
+		return pieceCode;
 	}
 	
 	
@@ -129,6 +155,14 @@ public class ChessPiece {
 			Rook r = (Rook)this;
 			nextMoves = r.getNextMoves(board);
 		}
+		else if(this.getClass().equals(PieceType.Empress.class)){
+			Empress r = (Empress)this;
+			nextMoves = r.getNextMoves(board);
+		}
+		else if(this.getClass().equals(PieceType.Princess.class)){
+			Princess r = (Princess)this;
+			nextMoves = r.getNextMoves(board);
+		}
 		else{
 			Pawn p = (Pawn)this;
 			nextMoves = p.getNextMoves(board);
@@ -174,6 +208,14 @@ public class ChessPiece {
 			Rook r = (Rook)this;
 			return r.moveTo(row, col, board, p);
 		}
+		else if(this.getClass().equals(PieceType.Princess.class)){
+			Princess r = (Princess)this;
+			return r.moveTo(row, col, board, p);
+		}
+		else if(this.getClass().equals(PieceType.Empress.class)){
+			Empress r = (Empress)this;
+			return r.moveTo(row, col, board, p);
+		}
 		else{
 			Pawn s = (Pawn)this;
 			return s.moveTo(row, col, board, p);
@@ -183,6 +225,9 @@ public class ChessPiece {
 	
 	
 	/**
+	 * Detects if a given element exists in the List or not. Here this method checks if the provided
+	 * move passed in as parameter is inside the ArrayList of chess moves (valid). Depending of its
+	 * existence in the List a true or false answer is returned.
 	 * 
 	 * @param list
 	 * @param candidate
@@ -195,6 +240,8 @@ public class ChessPiece {
 		            return true;
 		        }
 		    }
+		    
+		    //Invalid move, Not in the Valid List of Moves
 		    return false;
 		}
 }

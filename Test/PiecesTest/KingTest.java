@@ -1,6 +1,3 @@
-/**
- * 
- */
 package PiecesTest;
 
 import java.util.ArrayList;

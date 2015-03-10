@@ -13,8 +13,8 @@ import Components.Player;
  * This class represents the custom piece 'Princess'. All the implementation of its attributes
  * and functionalities can be found here. Princess is a special piece and it inherits its movements
  * from the Princess and the Bishop. She has to protect her father(King) in this war. Usually she does
- * not appear in a normal game of chess, but due to here exceptional battle skills, she is called upon
- * to unleash the wrath.
+ * not appear in a normal game of chess, but due to her exceptional battle skills, she is called upon
+ * to unleash her wrath.
  *  
  * @author Vishrut Reddi
  *
