@@ -119,7 +119,6 @@ public class GameController{
 			}
 		});
 		
-		//TODO: Implementation Pending
 		undo.addActionListener(new ActionListener(){
 			
 			public void actionPerformed(ActionEvent e){
@@ -259,6 +258,31 @@ public class GameController{
 					public void actionPerformed(ActionEvent e){
 						
 						int[] buttonPos = boardView.getSpotPosition(curSpot);
+						
+						
+						if(p1.isCheck(board)){
+							
+							if(p1.isCheckMate(board, boardView)){
+								
+								menuView.player2Score++;
+								updateScore();
+								menuView.message = "Checkmate: Player 2 Won";
+								menuView.addMessage();
+							}
+							
+						}
+						
+						if(p2.isCheck(board)){
+							
+							if(p2.isCheckMate(board, boardView)){
+								
+								menuView.player1Score++;
+								updateScore();
+								menuView.message = "Checkmate: Player 1 Won";
+								menuView.addMessage();
+							}
+							
+						}
 						
 						if(board.spotOpen(buttonPos[0], buttonPos[1])){
 							
@@ -443,4 +467,7 @@ public class GameController{
 		
 		
 	}
+	
 }
+
+

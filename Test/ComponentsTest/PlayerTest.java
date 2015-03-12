@@ -11,6 +11,7 @@ import Components.ChessBoard;
 import Components.ChessPiece;
 import Components.ChessPiece.PieceColor;
 import Components.Player;
+import UI.ChessBoardView;
 
 /**
  * @author vishrutreddi
@@ -96,6 +97,7 @@ public class PlayerTest extends TestCase {
 	@Test
 	public void testIsCheckMate() throws Exception{
 		
+		ChessBoardView view = new ChessBoardView();
 		ChessBoard board = new ChessBoard();
 		
 		Player p1 = new Player(PieceColor.WHITE);
@@ -106,8 +108,8 @@ public class PlayerTest extends TestCase {
 		
 		board.setNewGame(p1, p2);
 		
-		assertEquals(false, p1.isCheckMate(board));
-		assertEquals(false, p2.isCheckMate(board));
+		assertEquals(false, p1.isCheckMate(board, view));
+		assertEquals(false, p2.isCheckMate(board, view));
 		
 		ChessPiece friendlyPawn = board.getPieceAtSpot(1, 4);
 		board.removePieceFromSpot(1, 4);
@@ -121,7 +123,7 @@ public class PlayerTest extends TestCase {
 		//Logging Board State
 		board.printBoardState();
 		
-		assertEquals(false, p1.isCheckMate(board));
+		assertEquals(false, p1.isCheckMate(board, view));
 		
 		//Lets try a new game scene where check mate is tested
 		ChessBoard board2 = new ChessBoard();
@@ -150,7 +152,8 @@ public class PlayerTest extends TestCase {
 		
 		//Logging Board State
 		board2.printBoardState();	
-		assertEquals(true, whiteP.isCheckMate(board2));
+		assertEquals(true, whiteP.isCheckMate(board2, view));
+		
 		
 	}
 

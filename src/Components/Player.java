@@ -3,6 +3,7 @@ package Components;
 import java.util.ArrayList;
 
 import Components.ChessPiece.PieceColor;
+import UI.ChessBoardView;
 
 
 /**
@@ -248,7 +249,7 @@ public class Player {
 		return false;
 	}
 	
-	//EMERGENCY:: NEEDS FIXING!!!
+	
 	/**
 	 * Depending on the current board state/situation, this method returns a 
 	 * true or false result as to the player under attack is currently check-mate or 
@@ -257,40 +258,28 @@ public class Player {
 	 * @param board
 	 * @return
 	 */
-	public boolean isCheckMate(ChessBoard board){
+	public boolean isCheckMate(ChessBoard board, ChessBoardView view){
 		
-		ChessBoard emulatedBoard = new ChessBoard();
-		Player emulatedP1 = new Player();			/* Trying to get out of Check */
-		Player emulatedP2 = new Player();			/* Trying for Check-Mate */
-		
-		emulatedBoard = board.deepCopyBoard();
-		emulatedP1.setOpponent(emulatedP2);
-		emulatedP2.setOpponent(emulatedP1);
-		
-		//Copying Player Teams
-		emulatedP1.team = this.getPlayerColor();
-		emulatedP2.team = this.getOpponent().getPlayerColor();
-		
-		//Creating Alive List of Pieces for the new Emulated Copied Board
-		emulatedP1.alivePieces = this.getCurAliveList(emulatedBoard);
-		emulatedP2.alivePieces = this.getOpponent().getCurAliveList(emulatedBoard);
-		
-
-		for(ChessPiece piece : emulatedP1.alivePieces){
+		Player p1 = this;
+		Player p2 = this.getOpponent();
+		for(ChessPiece piece : alivePieces){
 			
-			//emulatedBoard = board.shallowCopyBoard();
-			
-			for(int[] move : piece.getNextValidMoves(emulatedBoard)){
+			for(int[] move : piece.getNextValidMoves(board)){
 				
-				piece.validMoveTo(move[0], move[1], emulatedBoard, emulatedP1);
+				board.setPreviousStateBoard();
+				p1.setPrevAliveList(p1.getCurAliveList(board));
+				p2.setPrevAliveList(p2.getCurAliveList(board));
 				
-				System.out.println("Move Tried: " + piece.getClass() + " " + move[0] + "," + move[1]);
-				emulatedBoard.printBoardState();
-				emulatedP1.printStatus(emulatedBoard);
-				emulatedP2.printStatus(emulatedBoard);
-				
-				if(!emulatedP1.isCheck(emulatedBoard))
-					return false;
+				if(piece.validMoveTo(move[0], move[1], board, this)){
+					
+					System.out.println(piece.getClass());
+					board.boardUndo(p1, p2);
+					p1.playerUndo();
+					p2.playerUndo();
+					
+					return false;				
+					
+				}
 			}
 		}
 		
